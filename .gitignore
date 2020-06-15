@@ -1,0 +1,5 @@
+*.info
+*.json
+*.user
+*.qmlc
+*.jsc
