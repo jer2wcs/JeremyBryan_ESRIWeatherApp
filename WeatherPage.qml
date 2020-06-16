@@ -69,13 +69,15 @@ Item {
                 var parsedWeather = doc.responseText ? JSON.parse(doc.responseText) : null
 
                 if (parsedWeather && doc.status === 200) {
-                    // cache this weather data
+                    //
+                    // we have good data, cache it for future use
+                    //
                     fileFolder.writeTextFile("cachedWeatherData.json", JSON.stringify(parsedWeather))
+
                     currentTempLabel.text = qsTr(temperatureToString(parsedWeather.current.temp))
                     var weatherString = getWeatherStringForIcon(parsedWeather.current.weather[0].id)
                     descriptionLabel.text = qsTr(weatherString)
-
-                    weatherDataStatus.text = "LIVE"
+                    weatherDataStatus.source = "assets/live.png"
                     for (var ii = 0; ii < 7; ii++) {
                         var dailyWeatherString = getWeatherStringForIcon(parsedWeather.daily[ii].weather[0].id)
                         weatherModel.setProperty(ii, "day", timpestampToDay(parsedWeather.daily[ii].dt))
@@ -85,26 +87,31 @@ Item {
                     }
                 } else {
                     if (parsedWeather && parsedWeather.message) {
+                        //
                         // received a response, but the server reported the request was not successful
+                        //
                         console.log("|------------------------------------------------|")
                         console.log("UNSUCCESSFUL REQUEST --> " + parsedWeather.message)
                         console.log("|------------------------------------------------|")
                     } else {
+                        //
                         // no response
+                        //
                         console.log("|------------------------------------------------|")
                         console.log("NETWORK ERROR --> " + doc.status + " / " + doc.text)
                         console.log("|------------------------------------------------|")
                     }
 
+                    //
                     // load cached data
+                    //
                     var cachedWeather = JSON.parse(fileFolder.readTextFile("cachedWeatherData.json"))
 
                     if (cachedWeather) {
                         currentTempLabel.text = qsTr(temperatureToString(cachedWeather.current.temp))
-                        locationButton.text = qsTr(cachedWeather.timezone)
                         var cachedWeatherString = getWeatherStringForIcon(cachedWeather.current.weather[0].id)
                         descriptionLabel.text = qsTr(cachedWeatherString)
-                        weatherDataStatus.text = "CACHED"
+                        weatherDataStatus.source = "assets/notlive.png"
                         for (var jj = 0; jj < 7; jj++) {
                             var dailyCachedWeatherString = getWeatherStringForIcon(cachedWeather.daily[jj].weather[0].id)
                             weatherModel.setProperty(jj, "day", timpestampToDay(cachedWeather.daily[jj].dt))
@@ -118,9 +125,9 @@ Item {
             }
         }
 
-        console.log("|------------------------------------------------|")
-        console.log("Query URL: " + url)
-        console.log("|------------------------------------------------|")
+        //console.log("|------------------------------------------------|")
+        //console.log("Query URL: " + url)
+        //console.log("|------------------------------------------------|")
         doc.open("GET", url);
         doc.setRequestHeader('Accept', 'application/json');
         doc.send();
@@ -149,7 +156,6 @@ Item {
     }
 
     function getWeather(lat, lon) {
-        //const url = `${Constants.baseUrl}/data/2.5/weather?units=imperial&lon=${lon}&lat=${lat}&appid=${Constants.appid}`;
         const url = `${Constants.baseUrl}/data/2.5/onecall?exclude=minutely,hourly&units=imperial&lon=${lon}&lat=${lat}&appid=${Constants.appid}`;
         return getWeatherJSON(url)
     }
@@ -170,9 +176,11 @@ Item {
         path: app.folder.path
     }
 
+    //
     // App Page
-    Page{
-        id: page
+    //
+    Page {
+        id: weatherPage
         x: 0
         anchors.fill: parent
 
@@ -188,9 +196,7 @@ Item {
             onPositionChanged: {
                 stop()
                 var coord = positionSource.position.coordinate;
-                //console.log("|------------------------------------------------|")
-                //console.log("ON POSITION CHANGED: Coordinate: " + coord)
-                //console.log("|------------------------------------------------|")
+
                 if (coord.isValid) {
                     getWeather (coord.latitude, coord.longitude)
                     getCity (coord.latitude, coord.longitude)
@@ -203,7 +209,6 @@ Item {
             source: "./assets/ClearSkyBackground.png"
             width: 421
             height: 750
-            //border {left: 5; top: 5; right: 5; bottom: 5}
         }
 
         Text {
@@ -292,7 +297,7 @@ Item {
         Rectangle {
             id: listViewBackground
             width: 371
-            height: 425
+            height: 435
             x: 25
             y:290
 
@@ -324,20 +329,19 @@ Item {
             width: 400
             height: 500
             spacing: 5
+            interactive: false
 
             model: weatherModel
             header: headerDelegate
             delegate: weatherDelegate
         }
 
-        Text {
+        Image {
             id: weatherDataStatus
             x: 40
             y: 700
 
-            text: "Communicating with server..."
-            font.pixelSize: 10
-            color: "white"
+            source: "assets/notlive.png"
         }
     }
 }
