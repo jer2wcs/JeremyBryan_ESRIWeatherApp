@@ -23,16 +23,26 @@ Rectangle {
 
     Text{
         id: weatherDescription
-        x: 125
+        x: 110
         y: 12
         color: "white"
         text: weather
         font.pixelSize: 14
     }
 
+    Image {
+        id: weatherImage
+        x: 220
+        y: 7
+        width: 30
+        height: 30
+
+        source: "assets/icons/" + weatherDescription.text + ".png"
+    }
+
     Text{
         id: weatherHigh
-        x: 250
+        x: 270
         y: 12
         color: "white"
         text: max
@@ -41,7 +51,7 @@ Rectangle {
 
     Text{
         id: weatherLow
-        x: 300
+        x: 315
         y: 12
         color: "white"
         text: min

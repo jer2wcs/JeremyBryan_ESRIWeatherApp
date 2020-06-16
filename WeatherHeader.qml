@@ -24,10 +24,10 @@ Rectangle {
         id: headerForcast
         width: parent.width
         height: 20
-        x: 125
+        x: 110
         y: 0
 
-        text: "Forcast"
+        text: "Forecast"
         font.pixelSize: 14
         font.bold: true
         color: "white"
@@ -37,7 +37,7 @@ Rectangle {
         id: headerHigh
         width: parent.width
         height: 20
-        x: 250
+        x: 263
         y: 0
 
         text: "High"
@@ -50,7 +50,7 @@ Rectangle {
         id: headerLow
         width: parent.width
         height: 20
-        x: 300
+        x: 308
         y: 0
 
         text: "Low"
