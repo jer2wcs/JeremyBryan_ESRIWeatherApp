@@ -77,10 +77,11 @@ Item {
 
                     weatherDataStatus.text = "LIVE"
                     for (var ii = 0; ii < 7; ii++) {
+                        var dailyWeatherString = getWeatherStringForIcon(parsedWeather.daily[ii].weather[0].id)
                         weatherModel.setProperty(ii, "day", timpestampToDay(parsedWeather.daily[ii].dt))
                         weatherModel.setProperty(ii, "max", temperatureToString(parsedWeather.daily[ii].temp.max))
                         weatherModel.setProperty(ii, "min", temperatureToString(parsedWeather.daily[ii].temp.min))
-                        weatherModel.setProperty(ii, "weather", weatherString)
+                        weatherModel.setProperty(ii, "weather", dailyWeatherString)
                     }
                 } else {
                     if (parsedWeather && parsedWeather.message) {
@@ -105,10 +106,11 @@ Item {
                         descriptionLabel.text = qsTr(cachedWeatherString)
                         weatherDataStatus.text = "CACHED"
                         for (var jj = 0; jj < 7; jj++) {
+                            var dailyCachedWeatherString = getWeatherStringForIcon(cachedWeather.daily[jj].weather[0].id)
                             weatherModel.setProperty(jj, "day", timpestampToDay(cachedWeather.daily[jj].dt))
                             weatherModel.setProperty(jj, "max", temperatureToString(cachedWeather.daily[jj].temp.max))
                             weatherModel.setProperty(jj, "min", temperatureToString(cachedWeather.daily[jj].temp.min))
-                            weatherModel.setProperty(jj, "weather", cachedWeatherString)
+                            weatherModel.setProperty(jj, "weather", dailyCachedWeatherString)
                         }
                     }
                 }
@@ -116,9 +118,9 @@ Item {
             }
         }
 
-        //console.log("|------------------------------------------------|")
-        //console.log("Query URL: " + url)
-        //console.log("|------------------------------------------------|")
+        console.log("|------------------------------------------------|")
+        console.log("Query URL: " + url)
+        console.log("|------------------------------------------------|")
         doc.open("GET", url);
         doc.setRequestHeader('Accept', 'application/json');
         doc.send();
