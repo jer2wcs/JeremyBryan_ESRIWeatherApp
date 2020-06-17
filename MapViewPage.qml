@@ -25,9 +25,8 @@ import ArcGIS.AppFramework 1.0
 import Esri.ArcGISRuntime 100.2
 
 Item {
-    id: mapPage
+    id: mapViewPage
 
-    signal next();
     signal back();
 
     function units(value) {
@@ -89,7 +88,7 @@ Item {
                 }
                 Label {
                     Layout.fillWidth: true
-                    text: qsTr("Current Location")
+                    text: qsTr("Map View of Current Location")
                     elide: Label.ElideRight
                     horizontalAlignment: Qt.AlignLeft
                     verticalAlignment: Qt.AlignVCenter
