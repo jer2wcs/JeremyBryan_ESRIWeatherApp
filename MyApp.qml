@@ -49,24 +49,21 @@ App{
     StackView {
         id: stackView
         anchors.fill: parent
-        initialItem: startPage
+        initialItem: weatherPage
     }
 
     Component {
-        id: startPage
-        StartPage{
+        id: weatherPage
+        WeatherPage {
             onNext: {
-                stackView.push(page1);
+                stackView.push(mapViewPage);
             }
         }
     }
 
     Component {
-        id: page1
-        Page1{
-            onNext: {
-                stackView.push(page2);
-            }
+        id: mapViewPage
+        MapViewPage {
             onBack: {
                 stackView.pop();
             }
